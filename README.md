@@ -26,9 +26,6 @@ How to Use
 6. The app will notify you at the scheduled time.
 
 Project Structure
-
-Medicine-Reminder-App/
-│
 ├── index.html
 ├── style.css
 ├── script.js
