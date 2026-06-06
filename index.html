@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Medicine Manager - Your Health Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Login Page -->
+<div id="loginPage" class="login-page active">
+  <div class="login-container">
+    <div class="login-box">
+      <div class="login-icon">💊</div>
+      <h1>Medicine Manager</h1>
+      <p>Your Personal Health Assistant</p>
+      
+      <!-- Initial Buttons -->
+      <div id="authButtons" class="auth-buttons">
+        <button class="auth-choice-btn" onclick="showLoginForm()">Login</button>
+        <button class="auth-choice-btn" onclick="showSignupForm()">Sign Up</button>
+      </div>
+
+      <!-- Forms Container (Hidden by default) -->
+      <div id="formsContainer" class="forms-container hidden">
+        <!-- Tab Buttons -->
+        <div class="auth-tabs">
+          <button class="tab-btn active" onclick="switchToLogin()">Login</button>
+          <button class="tab-btn" onclick="switchToSignup()">Sign Up</button>
+          <button class="close-tabs-btn" onclick="closeAuthForms()">✕</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm" class="auth-form active">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" required>
+        </div>
+        <button class="login-btn" onclick="handleLogin()">Login</button>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div id="signupForm" class="auth-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="signupName" placeholder="Enter your full name" required>
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" id="signupAge" placeholder="Enter your age" min="1" max="150" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="signupEmail" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signupPassword" placeholder="Create a password" required>
+        </div>
+        <button class="login-btn" onclick="handleSignup()">Sign Up</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main App (Hidden until login) -->
+<div id="mainApp" class="main-app hidden">
+  <div class="navbar">
+    <h1></h1>
+    <div class="nav-buttons">
+      <div class="profile-dropdown-container">
+        <button class="profile-btn" onclick="toggleProfileDropdown()">👤 Profile</button>
+        <div id="profileDropdown" class="profile-dropdown hidden">
+          <button class="dropdown-item" onclick="showProfileDetails()">👥 My Profile</button>
+          <button class="dropdown-item" onclick="handleLogout()">🚪 Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard View (Default) -->
+  <div id="dashboardView" class="view-section active">
+    <!-- Alert Banner -->
+    <div id="alertBanner" class="alert-banner hidden">
+      <div id="alertContent" class="alert-content"></div>
+    </div>
+
+    <div class="dashboard-main-container">
+      <h2>📊 Dashboard</h2>
+      
+      <!-- User Greeting -->
+      <div class="user-greeting">
+        <p id="greetingText">Welcome back!</p>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Medicines Section -->
+        <div class="dashboard-card medicines-card">
+          <h3>💊 Today's Medicines</h3>
+          <div id="todayReminders" class="dashboard-list"></div>
+          <button class="view-more-btn" onclick="showMedicines()">View All →</button>
+        </div>
+
+        <!-- Appointments Section -->
+        <div class="dashboard-card appointments-card">
+          <h3>📅 Upcoming Appointments</h3>
+          <div id="appointmentsList" class="dashboard-list"></div>
+          <button class="view-more-btn" onclick="showAppointments()">View All →</button>
+        </div>
+
+        <!-- Low Stock Medicines Section -->
+        <div class="dashboard-card stock-card">
+          <h3>⚠️ Low Stock Alerts</h3>
+          <div id="lowStockList" class="dashboard-list"></div>
+          <button class="view-more-btn" onclick="showMedicines()">Manage →</button>
+        </div>
+      </div>
+
+      <div class="dashboard-actions">
+        <button class="action-btn" onclick="showMedicines(); scrollToAddMedicine();">+ Add Medicine</button>
+        <button class="action-btn" onclick="showAppointments(); scrollToAddAppointment();">+ Book Appointment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Details View -->
+  <div id="profileView" class="view-section">
+    <button class="back-btn" onclick="showDashboard()">← Back to Dashboard</button>
+    <h2>👤 My Profile</h2>
+    
+    <div class="profile-container">
+      <!-- User Info Card - Hidden by Default -->
+      <div class="profile-header hidden" id="profileHeader">
+        <div class="profile-avatar">👤</div>
+        <div class="profile-info">
+          <h2 id="userFullName">Welcome</h2>
+          <p id="userAge" class="profile-age">Age: --</p>
+          <p id="userEmail" class="profile-email">Email: --</p>
+        </div>
+      </div>
+
+      <!-- Main Content - Vertical Layout -->
+      <div class="vertical-layout">
+        <!-- View Profile Info Button -->
+        <button class="toggle-profile-btn" onclick="toggleProfileInfo()">👤 View My Information</button>
+
+        <!-- Switch Account Section -->
+        <div class="dashboard-section account-section">
+          <h3>🔐 Switch Account or Sign Up</h3>
+          
+          <!-- Account Buttons -->
+          <div id="accountButtons" class="account-buttons">
+            <button class="auth-choice-btn" onclick="showProfileLoginForm()">Login</button>
+            <button class="auth-choice-btn" onclick="showProfileSignupForm()">Sign Up</button>
+          </div>
+
+          <!-- Auth Forms Container (Hidden by default) -->
+          <div id="profileFormsContainer" class="profile-forms-container hidden">
+            <!-- Tab Buttons -->
+            <div class="auth-tabs">
+              <button class="tab-btn active" onclick="switchToProfileLogin()">Login</button>
+              <button class="tab-btn" onclick="switchToProfileSignup()">Sign Up</button>
+              <button class="close-tabs-btn" onclick="closeProfileAuthForms()">✕</button>
+            </div>
+
+            <!-- Profile Login Form -->
+            <div id="profileLoginForm" class="auth-form active">
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="profileLoginEmail" placeholder="Enter your email" required>
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="profileLoginPassword" placeholder="Enter your password" required>
+              </div>
+              <button class="login-btn" onclick="handleProfileLogin()">Login</button>
+            </div>
+
+            <!-- Profile Sign Up Form -->
+            <div id="profileSignupForm" class="auth-form">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="profileSignupName" placeholder="Enter your full name" required>
+              </div>
+              <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="profileSignupAge" placeholder="Enter your age" min="1" max="150" required>
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="profileSignupEmail" placeholder="Enter your email" required>
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="profileSignupPassword" placeholder="Create a password" required>
+              </div>
+              <button class="login-btn" onclick="handleProfileSignup()">Sign Up</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diseases Section -->
+        <div class="dashboard-section diseases-section">
+          <h3>🏥 My Diseases</h3>
+          <div class="input-mini">
+            <input type="text" id="diseaseInput" placeholder="Enter disease name" required>
+            <button class="mini-btn" onclick="addDisease()">+ Add</button>
+          </div>
+          <div id="diseasesList" class="vertical-list"></div>
+        </div>
+
+        <!-- Medical Reports Section -->
+        <div class="dashboard-section reports-section">
+          <h3>📋 Medical Reports</h3>
+          <div class="input-mini">
+            <input type="file" id="reportFile" accept="image/*">
+            <button class="mini-btn" onclick="addMedicalReport()">+ Upload</button>
+          </div>
+          <div id="reportsList" class="vertical-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Medicines View -->
+  <div id="medicinesView" class="view-section">
+    <button class="back-btn" onclick="showDashboard()">← Back to Dashboard</button>
+  <div class="input-section">
+    <div class="input-card">
+      <label>Medicine Name</label>
+      <input type="text" id="name" placeholder="Enter medicine name" required>
+    </div>
+    <div class="input-card">
+      <label>Dosage</label>
+      <input type="text" id="dosage" placeholder="e.g., 500mg" required>
+    </div>
+    <div class="input-card">
+      <label>Quantity for Month</label>
+      <input type="number" id="quantity" placeholder="e.g., 30" required>
+    </div>
+    <div class="input-card">
+      <label>Time to Take</label>
+      <input type="time" id="time" required>
+    </div>
+    <div class="input-card">
+      <label>Medicine Purpose</label>
+      <input type="text" id="purpose" placeholder="e.g., Headache, Fever, Cough" required>
+    </div>
+    <div class="input-card">
+      <label>Medicine Photo</label>
+      <input type="file" id="medicinePhoto" accept="image/*" placeholder="Upload medicine photo">
+      <div id="photoPreview" class="photo-preview"></div>
+    </div>
+    <button class="add-btn" onclick="addReminder()">+ Add Medicine</button>
+  </div>
+  <div class="calendar-medicines-row">
+    <div class="medicines-list-side">
+      <h3>💊 All Medicines</h3>
+      <div id="list" class="medicines-list"></div>
+    </div>
+    <div class="tracker-table-side">
+      <h3>✅ Daily Tracker</h3>
+      <div id="medicineTable" class="medicine-table-container"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Appointments View -->
+<div id="appointmentsView" class="view-section">
+    <button class="back-btn" onclick="showDashboard()">← Back to Dashboard</button>
+  <div class="input-section">
+    <div class="input-card">
+      <label>Doctor Name</label>
+      <input type="text" id="doctorName" placeholder="Enter doctor name" required>
+    </div>
+    <div class="input-card">
+      <label>Appointment Date</label>
+      <input type="date" id="appointmentDate" required>
+    </div>
+    <div class="input-card">
+      <label>Appointment Time</label>
+      <input type="time" id="appointmentTime" required>
+    </div>
+
+    <button class="add-btn" onclick="addAppointment()">+ Book Appointment</button>
+  </div>
+
+  <h3>🏥 My Appointments</h3>
+  <div id="appointmentsListView" class="appointments-list"></div>
+</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
